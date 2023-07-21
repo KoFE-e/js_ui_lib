@@ -8,4 +8,4 @@ $('div').click(function() {
     console.log($(this).index());
 });
 
-console.log($('.findme').siblings());
+console.log($('.findme').fadeOut(1000).fadeIn(1000));
