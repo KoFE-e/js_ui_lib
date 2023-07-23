@@ -285,19 +285,33 @@ Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.dropdown-toggle').dropdo
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
 
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.calcScroll = function () {
+  let div = document.createElement('div');
+  div.style.width = '50px';
+  div.style.height = '50px';
+  div.style.overflowY = 'scroll';
+  div.style.visibility = 'hidden';
+  document.body.appendChild(div);
+  let scrollWidth = div.offsetWidth - div.clientWidth;
+  div.remove();
+  return scrollWidth;
+};
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.modal = function (created) {
+  const scroll = Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])().calcScroll();
   for (let i = 0; i < this.length; i++) {
     const target = this[i].getAttribute('data-target');
     Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).click(e => {
       e.preventDefault();
       Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).fadeIn(500);
       document.body.style.overflow = 'hidden';
+      document.body.style.marginRight = `${scroll}px`;
     });
     const closeElements = document.querySelectorAll(`${target} [data-close]`);
     closeElements.forEach(item => {
       Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(item).click(() => {
         Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).fadeOut(500);
         document.body.style.overflow = '';
+        document.body.style.marginRight = `0px`;
         if (created) {
           document.querySelector(target).remove();
         }
@@ -307,6 +321,7 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.modal = function (create
       if (e.target.classList.contains('modal')) {
         Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(target).fadeOut(500);
         document.body.style.overflow = '';
+        document.body.style.marginRight = `0px`;
         if (created) {
           document.querySelector(target).remove();
         }
