@@ -32,3 +32,17 @@ $('#trigger').click(() => $('#trigger').createModal({
         ]
     }
 }));
+
+window.addEventListener('DOMContentLoaded', () => {
+    $('#example2').createCarousel({
+        dots: true,
+        arrows: false,
+        count: 4,
+        content: [
+            "https://www.flixwatch.co/wp-content/uploads/80238012.jpg.webp",
+            "https://www.pinkvilla.com/images/2023-06/1611187259_black-clover-sword-of-the-wizard-king.jpg",
+            "https://m.economictimes.com/thumb/msid-100947486,width-1200,height-628,resizemode-4,imgsize-110074/black-clover-chapter-362-see-release-date-and-time.jpg",
+            "https://www.pinkvilla.com/images/2023-06/1611187259_black-clover-sword-of-the-wizard-king.jpg"
+        ]
+    });
+});

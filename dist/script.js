@@ -114,6 +114,143 @@ Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.accordion-head').accordi
 
 /***/ }),
 
+/***/ "./src/js/lib/components/carousel.js":
+/*!*******************************************!*\
+  !*** ./src/js/lib/components/carousel.js ***!
+  \*******************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.carousel = function (dotsEnabled = true, arrowsEnabled = true) {
+  for (let i = 0; i < this.length; i++) {
+    if (this[i].querySelector('.carousel-inner')) {
+      const width = window.getComputedStyle(this[i].querySelector('.carousel-inner')).width;
+      const slides = this[i].querySelectorAll('.carousel-item');
+      const slidesField = this[i].querySelector('.carousel-slides');
+      const dots = this[i].querySelectorAll('.carousel-indicators li');
+      slidesField.style.width = 100 * slides.length + '%';
+      slides.forEach(slide => {
+        slide.style.width = width;
+      });
+      let offset = 0;
+      let slideIndex = 0;
+      if (arrowsEnabled) {
+        Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i].querySelector('[data-slide="next"]')).click(e => {
+          e.preventDefault();
+          if (offset == +width.replace(/\D/g, '') * (slides.length - 1)) {
+            offset = 0;
+          } else {
+            offset += +width.replace(/\D/g, '');
+          }
+          slidesField.style.transform = `translateX(-${offset}px)`;
+          if (slideIndex == slides.length - 1) {
+            slideIndex = 0;
+          } else {
+            slideIndex++;
+          }
+          if (dotsEnabled) {
+            dots.forEach(dot => {
+              dot.classList.remove('active');
+            });
+            dots[slideIndex].classList.add('active');
+          }
+        });
+        Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i].querySelector('[data-slide="prev"]')).click(e => {
+          e.preventDefault();
+          if (offset == 0) {
+            offset = +width.replace(/\D/g, '') * (slides.length - 1);
+          } else {
+            offset -= +width.replace(/\D/g, '');
+          }
+          slidesField.style.transform = `translateX(-${offset}px)`;
+          if (slideIndex == 0) {
+            slideIndex = slides.length - 1;
+          } else {
+            slideIndex--;
+          }
+          if (dotsEnabled) {
+            dots.forEach(dot => {
+              dot.classList.remove('active');
+            });
+            dots[slideIndex].classList.add('active');
+          }
+        });
+      }
+      if (dotsEnabled) {
+        const sliderId = this[i].getAttribute('id');
+        Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(`#${sliderId} .carousel-indicators li`).click(e => {
+          const slideTo = e.target.getAttribute('data-slide-to');
+          slideIndex = slideTo;
+          offset = +width.replace(/\D/g, '') * slideTo;
+          slidesField.style.transform = `translateX(-${offset}px)`;
+          dots.forEach(dot => {
+            dot.classList.remove('active');
+          });
+          dots[slideIndex].classList.add('active');
+        });
+      }
+    }
+  }
+};
+Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.carousel').carousel();
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.createCarousel = function ({
+  dots,
+  arrows,
+  count,
+  content
+} = {}) {
+  for (let i = 0; i < this.length; i++) {
+    const imgs = [];
+    for (let j = 0; j < count; j++) {
+      let item = document.createElement('div');
+      item.classList.add('carousel-item');
+      let img = document.createElement('img');
+      img.src = content[j];
+      img.alt = j;
+      item.append(img);
+      imgs.push(item);
+    }
+    this[i].innerHTML = `
+            <div class="carousel-inner">
+                <div class="carousel-slides">
+                
+                </div>
+            </div>
+        `;
+    if (dots) {
+      const indicators = document.createElement('ol');
+      indicators.classList.add('carousel-indicators');
+      for (let j = 0; j < count; j++) {
+        const listItem = document.createElement('li');
+        if (j == 0) listItem.classList.add('active');
+        listItem.setAttribute('data-slide-to', j);
+        indicators.append(listItem);
+      }
+      this[i].append(indicators);
+    }
+    if (arrows) {
+      this[i].insertAdjacentHTML('beforeend', `
+            <a href="#" class="carousel-prev" data-slide="prev">
+                <span class="carousel-prev-icon">&lt;</span>
+            </a>
+            <a href="#" class="carousel-next" data-slide="next">
+                <span class="carousel-next-icon">&gt;</span>
+            </a>
+            `);
+    }
+    if (content && count > 0) {
+      this[i].querySelector('.carousel-slides').append(...imgs);
+    }
+    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i]).carousel(dots, arrows);
+  }
+};
+
+/***/ }),
+
 /***/ "./src/js/lib/components/dropdown.js":
 /*!*******************************************!*\
   !*** ./src/js/lib/components/dropdown.js ***!
@@ -302,6 +439,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_modal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/modal */ "./src/js/lib/components/modal.js");
 /* harmony import */ var _components_tab__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/tab */ "./src/js/lib/components/tab.js");
 /* harmony import */ var _components_accordion__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/accordion */ "./src/js/lib/components/accordion.js");
+/* harmony import */ var _components_carousel__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/carousel */ "./src/js/lib/components/carousel.js");
+
 
 
 
@@ -681,6 +820,14 @@ $('#trigger').click(() => $('#trigger').createModal({
     }]]
   }
 }));
+window.addEventListener('DOMContentLoaded', () => {
+  $('#example2').createCarousel({
+    dots: true,
+    arrows: false,
+    count: 4,
+    content: ["https://www.flixwatch.co/wp-content/uploads/80238012.jpg.webp", "https://www.pinkvilla.com/images/2023-06/1611187259_black-clover-sword-of-the-wizard-king.jpg", "https://m.economictimes.com/thumb/msid-100947486,width-1200,height-628,resizemode-4,imgsize-110074/black-clover-chapter-362-see-release-date-and-time.jpg", "https://www.pinkvilla.com/images/2023-06/1611187259_black-clover-sword-of-the-wizard-king.jpg"]
+  });
+});
 
 /***/ })
 
